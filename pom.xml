@@ -77,10 +77,6 @@
             <version>${latke.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </exclusion>
-                <exclusion>
                     <artifactId>mail</artifactId>
                     <groupId>javax.mail</groupId>
                 </exclusion>
@@ -89,6 +85,13 @@
                     <artifactId>jboss-vfs</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
         </dependency>
 
         <dependency>

@@ -35,7 +35,6 @@ import org.b3log.xiaov.util.Memo;
 import org.b3log.xiaov.util.XiaoVs;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
@@ -513,7 +512,7 @@ public class QQService {
         String msg = replaceBotName(content);
         if (StringUtils.isNotBlank(keyword)) {
             // 命中选词 进入自定义内容
-            ret = Memo.write(keyword, content, userName);
+            ret = Memo.write(keyword, userName, content);
         } else if (StringUtils.contains(content, XiaoVs.QQ_BOT_NAME) && StringUtils.isNotBlank(msg)) {
             if (1 == QQ_BOT_TYPE && StringUtils.isNotBlank(userName)) {
                 ret = turingQueryService.chat(userName, msg);

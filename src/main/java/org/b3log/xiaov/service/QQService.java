@@ -31,6 +31,7 @@ import org.b3log.latke.urlfetch.HTTPResponse;
 import org.b3log.latke.urlfetch.URLFetchService;
 import org.b3log.latke.urlfetch.URLFetchServiceFactory;
 import org.b3log.latke.util.Strings;
+import org.b3log.xiaov.util.Memo;
 import org.b3log.xiaov.util.XiaoVs;
 
 import javax.servlet.http.HttpServletResponse;
@@ -494,28 +495,25 @@ public class QQService {
         return msg;
     }
 
-    private String answer(final String content, final String userName) {
-        String keyword = "";
+    private String findKeyword(final String content) {
         String[] keywords = StringUtils.split(XiaoVs.getString("bot.follow.keywords"), ",");
         keywords = Strings.trimAll(keywords);
-        for (final String kw : keywords) {
-            if (StringUtils.containsIgnoreCase(content, kw)) {
-                keyword = kw;
-
-                break;
+        for (final String keyword : keywords) {
+            if (StringUtils.containsIgnoreCase(content, keyword)) {
+                return keyword;
             }
         }
 
+        return "";
+    }
+
+    private String answer(final String content, final String userName) {
+        String keyword = findKeyword(content);
         String ret = "";
         String msg = replaceBotName(content);
         if (StringUtils.isNotBlank(keyword)) {
-            try {
-                ret = XiaoVs.getString("bot.follow.keywordAnswer");
-                ret = StringUtils.replace(ret, "{keyword}",
-                        URLEncoder.encode(keyword, "UTF-8"));
-            } catch (final UnsupportedEncodingException e) {
-                LOGGER.log(Level.ERROR, "Search key encoding failed", e);
-            }
+            // 命中选词 进入自定义内容
+            ret = Memo.write(keyword, content, userName);
         } else if (StringUtils.contains(content, XiaoVs.QQ_BOT_NAME) && StringUtils.isNotBlank(msg)) {
             if (1 == QQ_BOT_TYPE && StringUtils.isNotBlank(userName)) {
                 ret = turingQueryService.chat(userName, msg);
